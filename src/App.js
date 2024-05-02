@@ -42,21 +42,23 @@ export default function App(){
         }
     };
       
-      const fetchUsers = async () => {
-        try {
-            const foundUsers = await indexUsers();
-            setUsers(foundUsers);
-        } catch (error) {
-            console.error('Error finding users', error);
-        }
-    }
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        const fetchUser = async () => {
+            try {
+                const fetchedUser = await getUser();
+                setUser(fetchedUser);
+            } catch (error) {
+                console.error('Failed to fetch user:', error);
+                setUser(null);
+            }
+        };
+
+        fetchUser();
+    }, [user]);
 
     return(
         <>
-        <NavBar 
+    <NavBar 
             setUser={setUser}
             user={user}
             users={users}

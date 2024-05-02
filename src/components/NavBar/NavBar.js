@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './NavBar.module.scss';
 import * as userService from '../../utilities/users-service';
 
-function NavBar({ logOut, setUser, user, users }) { // Combine all props into a single object
+function NavBar({ user, logOut }) {
     useEffect(() => {
         const navbar = document.querySelector(`.${styles.NavBar}`);
 
@@ -30,8 +30,11 @@ function NavBar({ logOut, setUser, user, users }) { // Combine all props into a 
 
     function handleLogOut() {
         userService.logOut();
-        setUser(null)
+        logOut(); // Update user state in parent component after logout
     }
+
+    // Log the value of the user prop for debugging
+    console.log('User prop:', user);
 
     return (
         <div className={styles.NavBar}>
@@ -48,31 +51,34 @@ function NavBar({ logOut, setUser, user, users }) { // Combine all props into a 
                     </div>
                 </Link>
                 <ul className={styles.navList}>
-                    <Link className={styles.Link} to="/">
-                        <div className={styles.iconContainer}>
+                    <li className={styles.Link}>
+                        <Link to="/" className={styles.iconContainer}>
                             <img className={styles.homeIcon} src="/img/home-logo-navy.png" alt="Home Icon" />
                             <img className={styles.outerIcon} src="/img/outer-circle.png" alt="Outer Circle" />
-                        </div>
-                    </Link>
-                    <Link className={styles.Link} to="/profile">
-                        <div className={styles.iconContainer}>
+                        </Link>
+                    </li>
+                    <li className={styles.Link}>
+                        <Link to="/profile" className={styles.iconContainer}>
                             <img className={styles.homeIcon} src="/img/profile-logo-navy.png" alt="Profile Icon" />
                             <img className={styles.outerIcon} src="/img/outer-circle.png" alt="Outer Circle" />
-                        </div>
-                    </Link>
-                    <Link className={styles.Link} to="/data">
-                        <div className={styles.iconContainer}>
+                        </Link>
+                    </li>
+                    <li className={styles.Link}>
+                        <Link to="/data" className={styles.iconContainer}>
                             <img className={styles.homeIcon} src="/img/data-logo-navy.png" alt="Data Icon" />
                             <img className={styles.outerIcon} src="/img/outer-circle.png" alt="Outer Circle" />
-                        </div>
-                    </Link>
-                    { !user ? '' :
-                        <div className={styles.UserLogOut}>
+                        </Link>
+                    </li>
+                    {/* Conditionally render "LOG OUT" link */}
+                    {user ? (
+                        <li className={styles.UserLogOut}>
                             <div className={styles.name}>{user.firstName}</div>
                             <div className={styles.email}>{user.email}</div>
-                            <button className="btn-sm" onClick={handleLogOut}>LOG OUT</button>
-                        </div>
-                    }
+                            <Link className="btn-sm" to="/" onClick={handleLogOut}>
+                                LOG OUT
+                            </Link>
+                        </li>
+                    ) : null}
                 </ul>
             </div>
         </div>

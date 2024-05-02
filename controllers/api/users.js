@@ -51,11 +51,11 @@ async function createAdmin(req, res, next) {
         }
 
         // Check if there are any existing administrators in the campus
-        if (!campus.admins) {
-            campus.admins = []; // Initialize admins array if it's undefined
-        } else if (campus.admins.length > 0) {
-            return res.status(400).json({ msg: "Initial Administrator already exists" });
-        }
+        // if (!campus.admins) {
+        //     campus.admins = []; // Initialize admins array if it's undefined
+        // } else if (campus.admins.length > 0) {
+        //     return res.status(400).json({ msg: "Initial Administrator already exists" });
+        // }
 
         // Hash the user password before saving it to the database
         const hashedPassword = await bcrypt.hash(req.body.password, 10); // 10 is the saltRounds

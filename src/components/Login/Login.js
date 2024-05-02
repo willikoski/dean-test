@@ -1,11 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import styles from './Login.module.scss';
+import { getUser } from '../../utilities/users-service'
 
 const LOGIN_URL = '/api/users/login';
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const Login = ({ toggleLoginForm, setUser }) => {
+const Login = ({ toggleLoginForm, setUser, user }) => {
     const navigateTo = useNavigate()
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -64,17 +65,13 @@ const Login = ({ toggleLoginForm, setUser }) => {
                 throw new Error('Failed to fetch user data');
             }
     
-            const userData = await userResponse.json();
-    
-            // Set user data
+            const user = await userResponse.json();
+            
             setUser({
-                firstName: userData.firstName,
-                email: userData.email,
+                firstName: user.firstName,
+                email: user.email,
                 // Add other user data properties if needed
             });
-    
-            // Log the user data
-            console.log(userData);
     
             // Navigate to the home page
             navigateTo('/');
@@ -84,9 +81,23 @@ const Login = ({ toggleLoginForm, setUser }) => {
         } catch (err) {
             setErrMsg(err.message || 'Login Failed');
             errRef.current.focus();
-        }        
+        }
     };
     
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const fetchedUser = await getUser();
+                setUser(fetchedUser);
+            } catch (error) {
+                console.error('Failed to fetch user:', error);
+                setUser(null);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
     return (
         <>
             {success ? (

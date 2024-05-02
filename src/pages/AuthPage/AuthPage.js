@@ -3,7 +3,7 @@ import styles from './AuthPage.module.scss';
 import Login from '../../components/Login/Login';
 import Register from '../../components/Register/Register';
 
-export default function AuthPage({ setUser }) {
+export default function AuthPage({ setUser, user }) {
   const [showLogin, setShowLogin] = useState(true);
 
   const toggleLoginForm = () => {
@@ -12,7 +12,7 @@ export default function AuthPage({ setUser }) {
 
   return (
     <main className={styles.AuthPage}>
-      {showLogin ? <Login setUser={setUser} toggleLoginForm={toggleLoginForm} /> : <Register setUser={setUser} toggleLoginForm={toggleLoginForm} />}
+      {showLogin ? <Login setUser={setUser} user={user} toggleLoginForm={toggleLoginForm} /> : <Register setUser={setUser} toggleLoginForm={toggleLoginForm} />}
     </main>
   );
 }
